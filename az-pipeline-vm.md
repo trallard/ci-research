@@ -1,27 +1,27 @@
 # Introduction to Azure Pipelines
 
 - [Introduction to Azure Pipelines](#introduction-to-azure-pipelines)
-  - [What you'll actually do](#what-youll-actually-do)
-  - [Azure DevOps setup](#azure-devops-setup)
-  - [Understanding the Azure Pipeline Build](#understanding-the-azure-pipeline-build)
-    - [Hands on](#hands-on)
-  - [Setting your pipeline](#setting-your-pipeline)
-  - [Python specific pipelines](#python-specific-pipelines)
-  - [🐍 Multiple Python versions](#%f0%9f%90%8d-multiple-python-versions)
-  - [Adding multi OS support](#adding-multi-os-support)
+  - [💻 What you'll actually do](#%f0%9f%92%bb-what-youll-actually-do)
+  - [🛠 Azure DevOps setup](#%f0%9f%9b%a0-azure-devops-setup)
+  - [📝 Understanding the Azure Pipeline Build](#%f0%9f%93%9d-understanding-the-azure-pipeline-build)
+    - [👩🏿‍💻 Hands on](#%f0%9f%91%a9%f0%9f%8f%bf%e2%80%8d%f0%9f%92%bb-hands-on)
+    - [Setting your pipeline](#setting-your-pipeline)
+  - [🐍 Python specific pipelines](#%f0%9f%90%8d-python-specific-pipelines)
+    - [🐍 Multiple Python versions](#%f0%9f%90%8d-multiple-python-versions)
+  - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
 
 You can use Azure pipelines to test, build and deploy your Python (or any other language) projects without needing to set up any insfrastructure of your own.
 
 For this tutorial we will use the [Microsoft-hosted agents](https://docs.microsoft.com/azure/devops/pipelines/agents/hosted?view=azure-devops&WT.mc_id=rse19-github-taallard) with Python preinstalled - note that these can be Windows, Linux or MacOS based.
 
-## What you'll actually do
+## 💻 What you'll actually do
 
 1. Create a new Azure DevOps CI pipeline
 2. Create a basic CI pipeline that will run automated `pytests` for your bokeh apps
 3. Create a more complex pipelines that use Anaconda to test on Windows, Linux and MacOs
 4. Create a pipeline to work on an Azure notebook
 
-## Azure DevOps setup
+## 🛠 Azure DevOps setup
 
 1. Head over to [Azure DevOps](https://azure.microsoft.com/services/devops/?WT.mc_id=rse19-github-taallard) click on Start for free (note you can directly link to your GitHub account).
 2. Once registered you need to create an organisation for your products. This will allow you to work with your collaborators in multiple shared-projects.
@@ -37,7 +37,7 @@ Make sure to give your project a meaningful name and add a sensible description.
 Then click on **Create**
 
 
-## Understanding the Azure Pipeline Build
+## 📝 Understanding the Azure Pipeline Build
 
 A build can have multiple stages. Each stage can contain one or more jobs. For example you might have the following stages:
 - Test (my code using unittest)
@@ -52,10 +52,10 @@ You can find a list of all the available tasks in the [Pipelines documentation](
 
 ---
 
-### Hands on 
+### 👩🏿‍💻 Hands on 
 Clone this wokrshop's repo: <https://github.com/trallard/ci-research> to your own GitHub profile.
 
-✨👩🏿‍💻 Let's start by creating our `azure-pipelines.yml` file in our repo. Make sure to place it on the root of your project directory.
+✨ Let's start by creating our `azure-pipelines.yml` file in our repo. Make sure to place it on the root of your project directory.
 
 ```yaml
 # Python example Azure Pipeline
@@ -102,7 +102,7 @@ git add azure-pipelines.yml
 git push
 ```
 
-## Setting your pipeline
+### Setting your pipeline
 
 Back in Azure Devops click on **Pipelines > New pipelines** and then select GitHub from the options presented:
 
@@ -119,7 +119,7 @@ Click on save and then run.
 You should see your first pipeline run and the logs being displayed.
 
 
-## Python specific pipelines
+## 🐍 Python specific pipelines
 
 Replace your steps:
 
@@ -171,7 +171,7 @@ Adding additional steps as if they were bash commands:
 
 Save, commit and see your pipeline run!
 
-## 🐍 Multiple Python versions
+### 🐍 Multiple Python versions
 
 You can modify your steps to use a matrix specification:
 (see [reference here](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example&WT.mc_id=rse19-github-taallard#strategies))
@@ -211,7 +211,7 @@ steps:
 ```
 Commit > see run!
 
-## Adding multi OS support 
+## 🖥👾 Adding multi OS support 
 
 <!-- <details> -->
   <summary>Click to expand!</summary>
@@ -256,7 +256,7 @@ jobs:
           pip install pytest pytest-azurepipelines
           python -m pytest tests/
         displayName: 'Test with pytest'
-        
+
   - job: Windows_unit_test
       pool:
         vmImage: 'windows-2019'
