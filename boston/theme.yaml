@@ -1,0 +1,8 @@
+attrs:
+  Figure:
+    plot_width: 200
+    plot_height: 200
+    sizing_mode: scale_both
+
+  Glyph:
+    size: 10

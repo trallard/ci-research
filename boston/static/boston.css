@@ -1,0 +1,9 @@
+.container {
+    width: 800px;
+}
+
+.bostonbg {
+    background-image: url(boston.jpg);
+    background-position: right;
+    background-repeat: no-repeat;
+}

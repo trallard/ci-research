@@ -1,0 +1,13 @@
+name: ci-research
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - numpy=1.17
+  - pandas=0.25
+  - scikit-learn=0.21.3
+  - matplotlib
+  - jupyterlab
+  - pip:
+      - jupyter-repo2docker
+      - jupyter-book
