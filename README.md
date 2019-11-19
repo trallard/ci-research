@@ -1,4 +1,5 @@
 ## CI/CD for research multiple ways
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-c886e5.svg)](https://opensource.org/licenses/MIT)
 
 ## Requirements
@@ -7,7 +8,11 @@
 
 ✨ GitHub Account
 
+💻 Git installed in your personal laptop
+
 🚇 _[Azure DevOps account](https://azure.microsoft.com/services/devops/?WT.mc_id=rse19-github-taallard)_
+
+📝 A text editor. I 💜VS Code, you can get it following this link 👉🏼 [VSCode](https://code.visualstudio.com//?wt.mc_id=rse19-github-taallard).
 
 ### Using Azure pipelines
 The workshop hands on session materials for using Azure pipelines can be found 👉🏼 [here](./az-pipeline-vm.md)
