@@ -25,11 +25,10 @@ stages:
           - script: python -m pip install jupyter-repo2docker
             displayName: "Install repo2docker"
           - script: |
-            jupyter-repo2docker ./ \
-            --image-name trallard/ci-research-r2d:$(Build.BuildId)
+              jupyter-repo2docker --image-name "trallard/ci-research-r2d:latest" https://github.com/trallard/ci-research.git
             displayName: "Create Docker image"
           - task: Docker@2
             displayName: Push image
             inputs: 
               command: push
-              imageName: trallard/ci-research-r2d:$(Build.BuildId)
+              imageName: trallard/ci-research-r2d:latest
