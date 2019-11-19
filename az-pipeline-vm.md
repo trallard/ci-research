@@ -10,6 +10,8 @@
     - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
     - [🖥🐍 Using conda environments](#%f0%9f%96%a5%f0%9f%90%8d-using-conda-environments)
     - [🖥 Complex pipelines: using templates](#%f0%9f%96%a5-complex-pipelines-using-templates)
+    - [🐳 Plus: Docker with Azure pipeliens](#%f0%9f%90%b3-plus-docker-with-azure-pipeliens)
+      - [Using a Dockerfile](#using-a-dockerfile)
 
 
 You can use Azure pipelines to test, build and deploy your Python (or any other language) projects without needing to set up any insfrastructure of your own.
@@ -353,7 +355,7 @@ This will add a whole new pipeline to your CI, which can have different triggers
 
 ### 🖥 Complex pipelines: using templates
 
-<!-- <details> -->
+<details>
 <summary>👇🏽 Click to expand!</summary>
 
 Sometimes you want to be able to use complex setups without your yaml becoming too convoluted. 
@@ -450,5 +452,62 @@ steps:
       python -m pytest tests/
     displayName: pytest
 ```
+
+</details>
+
+
+### 🐳 Plus: Docker with Azure pipeliens
+
+Note that you need a DockerHub account to complete all of this section. Though you can omit the pushing your image. 
+
+
+<!-- <details> -->
+<summary>👇🏽 Click to expand!</summary>
+
+First you need to create a connection service to access DockerHub. This will help us to keep our password secret.
+
+To do this click on `project settings > service connection > new service connection >  docker registry` 
+
+![service conn](./assets/connection.png)
+
+Give your connection a name and fill in with your Docker details:
+
+![service conn](./assets/docker.png)
+
+#### Using a Dockerfile
+
+If you already have a Dockerfile in place we can straight away  create a new pipeline `./azure-pipelines/dockerfile.yml`
+
+```yml
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+   - master
+   - pipelines
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  imageName: 'ci-research'
+
+steps:
+- task: Docker@2
+  displayName: Login to DockerHub
+  inputs:
+    command: login
+    containerRegistry: trallard-docker
+- task: Docker@2
+  displayName: Build an image and push to DockerHub
+  inputs:
+    repository: trallard/$(imageName)
+    tags: $(Build.BuildId)
+    command: buildAndPush
+    Dockerfile: **/Dockerfile
+```
+
+You can learn more about the Docker tasks 👉🏼[here](https://docs.microsoft.com/azure/devops/pipelines/tasks/build/docker?view=azure-devops&WT.mc_id=RSE-github-taallard)
 
 <!-- </details> -->
