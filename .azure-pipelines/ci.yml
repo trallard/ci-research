@@ -1,0 +1,66 @@
+#  using templates for the pipeline
+trigger:
+  - azure-pipelines
+  - master
+
+jobs:
+  - job:
+    displayName: Anaconda_ubuntu
+    pool:
+      vmImage: "ubuntu-16.04"
+    strategy:
+      matrix:
+        Python36:
+          python.version: "3.6"
+        Python37:
+          python.version: "3.7"
+
+    # using template
+    steps:
+      - template: ./anaconda.yml
+
+  # testing in MacOS
+  - job:
+    displayName: MacOS_test
+    pool:
+      vmImage: "macOS-10.13"
+    strategy:
+      matrix:
+        Python37:
+          python.version: "3.7"
+
+    steps:
+      - template: ./anaconda.yml
+
+  #  using TOX for the tests
+  - job:
+    displayName: TOX_tests
+    pool:
+      vmImage: "ubuntu-16.04"
+    strategy:
+      matrix:
+        py36:
+          python.version: "3.6"
+          tox.env: py36
+        py37:
+          python.version: "3.7"
+          tox.env: py37
+        py36-black:
+          python.version: "3.6"
+          tox.env: py36-black
+
+    steps:
+      - task: UsePythonVersion@0
+        displayName: "Use Python $(python.version) for tests"
+        inputs:
+          versionSpec: "$(python.version)"
+          architecture: "x64"
+
+      - script: pip install -U pip
+        displayName: "Upgrade pip"
+
+      - script: pip install tox
+        displayName: "Install tox"
+
+      - script: tox -e $(tox.env)
+        displayName: "Run tox -e $(tox.env)"

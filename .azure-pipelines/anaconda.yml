@@ -1,0 +1,17 @@
+steps:
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+    displayName: Add conda to PATH
+
+  - bash: conda create --yes --quiet --name testingEnv
+    displayName: Create Anaconda environment
+
+  - bash: |
+      source activate testingEnv
+      conda install --yes --quiet --name testingEnv python=$PYTHON_VERSION --file requirements.txt
+    displayName: Install Anaconda packages
+
+  - bash: |
+      source activate testingEnv
+      pip install pytest pytest-azurepipelines
+      python -m pytest tests/
+    displayName: pytest
