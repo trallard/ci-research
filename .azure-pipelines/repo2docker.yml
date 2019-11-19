@@ -21,7 +21,7 @@ stages:
               containerRegistry: trallard-docker
           - script: python -m pip install --upgrade pip
             displayName: "Upgrade pip"
-          - script: python -m pip install repo2docker
+          - script: python -m pip install jupyter-repo2docker
             displayName: "Install repo2docker"
           - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
             displayName: "Create Docker image"
