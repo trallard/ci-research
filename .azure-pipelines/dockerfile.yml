@@ -1,31 +1,37 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
 trigger:
   - master
   - pipelines
 
-pool:
-  vmImage: "Ubuntu-16.04"
+resources:
+  - repo: self
 
 variables:
-  imageName: "ci-research"
+  tag: "$(Build.BuildId)"
+  imageName: "trallard/ci-research"
 
-- stage: Build
-  displayName: Build and push stage
-  jobs:  
-  - job: Build
-    displayName: Build Docker image job
-    pool:
-      vmImage: $(ImageName)
-
-    steps:
-      - task: Docker@2
-        displayName: Login to DockerHub
-        inputs:
-          command: login
-          containerRegistry: trallard-docker
-      - task: Docker@2
-        displayName: Build an image and push to DockerHub
-        inputs:
-          repository: trallard/$(imageName)
-          tags: $(Build.BuildId)
-          command: buildAndPush
-          Dockerfile: "**/Dockerfile"
+stages:
+  - stage: Build
+    displayName: Build image
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: Docker@2
+            displayName: Login DockerHub
+            inputs:
+              command: login
+              containerRegistry: trallard-docker
+          - task: Docker@2
+            displayName: Build an image
+            inputs:
+              command: buildAndPush
+              dockerfile: "**/Dockerfile"
+              repository: $(imageName)
+              tags: |
+                $(tag)
