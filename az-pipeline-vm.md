@@ -17,7 +17,7 @@
 
 You can use Azure pipelines to test, build and deploy your Python (or any other language) projects without needing to set up any insfrastructure of your own.
 
-For this tutorial we will use the [Microsoft-hosted agents](https://docs.microsoft.com/azure/devops/pipelines/agents/hosted?view=azure-devops&WT.mc_id=rse19-github-taallard) with Python preinstalled - note that these can be Windows, Linux or MacOS based.
+For this tutorial we will use the [Microsoft-hosted agents](https://docs.microsoft.com/azure/devops/pipelines/agents/hosted?view=azure-devops&WT.mc_id=rse-github-taallard) with Python preinstalled - note that these can be Windows, Linux or MacOS based.
 
 ## 💻 What you'll be doing
 
@@ -28,7 +28,7 @@ For this tutorial we will use the [Microsoft-hosted agents](https://docs.microso
 
 ## 🛠 Azure DevOps setup
 
-1. Head over to [Azure DevOps](https://azure.microsoft.com/services/devops/?WT.mc_id=rse19-github-taallard) click on Start for free (note you can directly link to your GitHub account).
+1. Head over to [Azure DevOps](https://azure.microsoft.com/services/devops/?WT.mc_id=rse-github-taallard) click on Start for free (note you can directly link to your GitHub account).
 2. Once registered you need to create an organisation for your products. This will allow you to work with your collaborators in multiple shared-projects.
 ![](https://ml-devops-tutorial.readthedocs.io/en/latest/_images/new_org.png)
 When prompted to choose the location for your projects make sure to choose a close by region to you. For example, for this workshop we could use WestEurope.
@@ -53,7 +53,7 @@ You can imagine a pipeline as a dependency graph:
 ![](assets/pipeline_hierarchy.png)
 
 
-You can find a list of all the available tasks in the [Pipelines documentation](https://docs.microsoft.com/azure/devops/pipelines/tasks/?view=azure-devops&viewFallbackFrom=vsts&WT.mc_id=rse19-github-taallard). Plus you can define your own tasks using bash or PowerShell.
+You can find a list of all the available tasks in the [Pipelines documentation](https://docs.microsoft.com/azure/devops/pipelines/tasks/?view=azure-devops&viewFallbackFrom=vsts&WT.mc_id=rse-github-taallard). Plus you can define your own tasks using bash or PowerShell.
 
 ---
 
@@ -83,7 +83,7 @@ First we specify what triggers the pipeline, in this case pushing to the master 
 For example, you might not want any pr to build so you can set this to `pr:none` you can also use `regex` to define the builds or triggers.
 
 
-👉🏼 Read more about [triggers](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema&WT.mc_id=rse19-github-taallard#triggers)
+👉🏼 Read more about [triggers](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema&WT.mc_id=rse-github-taallard#triggers)
 
 
 The next step us defining the pool we want to use. Basically this is the OS for your project:. We are going to start with a basic Ubuntu runner:
@@ -147,7 +147,7 @@ steps:
 
 The steps: element can contain children like:
 
-`- task:`, which runs a specific task that's defined in Azure DevOps (see the full [Task reference](https://docs.microsoft.com/azure/devops/pipelines/tasks/index?view=azure-devops&WT.mc_id=rse19-github-taallard))
+`- task:`, which runs a specific task that's defined in Azure DevOps (see the full [Task reference](https://docs.microsoft.com/azure/devops/pipelines/tasks/index?view=azure-devops&WT.mc_id=rse-github-taallard))
 
 `- script:`, which runs an arbitrary set of commands as you see in a moment. The task in the code above is `UsePythonVersion`, which specifies the version of Python to use on the build agent. The `@<n>` suffix indicates the version of the task; `@0` indicates "preview".
 
@@ -179,7 +179,7 @@ Save, commit and see your pipeline run!
 ### 🐍 Multiple Python versions
 
 You can modify your steps to use a matrix specification:
-(👉🏼 see [reference here](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example&WT.mc_id=rse19-github-taallard#strategies))
+(👉🏼 see [reference here](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example&WT.mc_id=rse-github-taallard#strategies))
 
 ```yaml
 trigger:
