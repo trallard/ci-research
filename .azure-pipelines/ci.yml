@@ -1,6 +1,6 @@
 #  using templates for the pipeline
 trigger:
-  - azure-pipelines
+  - pipelines
   - master
 
 jobs:
