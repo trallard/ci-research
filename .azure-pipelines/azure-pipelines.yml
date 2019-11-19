@@ -1,7 +1,7 @@
 # Azure pipeline for Python project
 #  for python docs https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/python?view=azure-devops
 
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema#triggers
+# https://docs.microsoft.com/en-us/azure/dsevops/pipelines/yaml-schema?view=azure-devops&tabs=schema#triggers
 trigger:
   - master 
 

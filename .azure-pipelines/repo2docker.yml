@@ -7,13 +7,17 @@ variables:
 
 stages:
   - stage: Build
-    displayName: Build image
+    displayName: Build image with repo2docker
     jobs:
       - job: Build
         displayName: Build
         pool:
           vmImage: "Ubuntu-18.04"
         steps:
+          - task: UsePythonVersion@0
+            displayName: 'Get Python version' 
+            inputs:
+              versionSpec: '3.7'
           - task: Docker@2
             displayName: Login DockerHub
             inputs:
