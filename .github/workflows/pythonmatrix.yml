@@ -1,4 +1,4 @@
-name: Simple Python action
+name: Python matrix
 on:
   pull_request:
     branches:
