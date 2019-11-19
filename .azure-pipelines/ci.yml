@@ -1,6 +1,5 @@
 #  using templates for the pipeline
 trigger:
-  - pipelines
   - master
 
 jobs:
