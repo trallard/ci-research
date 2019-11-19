@@ -10,8 +10,9 @@
     - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
     - [🖥🐍 Using conda environments](#%f0%9f%96%a5%f0%9f%90%8d-using-conda-environments)
     - [🖥 Complex pipelines: using templates](#%f0%9f%96%a5-complex-pipelines-using-templates)
-    - [🐳 Plus: Docker with Azure pipeliens](#%f0%9f%90%b3-plus-docker-with-azure-pipeliens)
-      - [Using a Dockerfile](#using-a-dockerfile)
+    - [🐳 Bonus: Docker with Azure pipeliens](#%f0%9f%90%b3-bonus-docker-with-azure-pipeliens)
+      - [📝Using a Dockerfile](#%f0%9f%93%9dusing-a-dockerfile)
+      - [🛠 Using repo2docker](#%f0%9f%9b%a0-using-repo2docker)
 
 
 You can use Azure pipelines to test, build and deploy your Python (or any other language) projects without needing to set up any insfrastructure of your own.
@@ -456,7 +457,7 @@ steps:
 </details>
 
 
-### 🐳 Plus: Docker with Azure pipeliens
+### 🐳 Bonus: Docker with Azure pipeliens
 
 Note that you need a DockerHub account to complete all of this section. Though you can omit the pushing your image. 
 
@@ -474,7 +475,7 @@ Give your connection a name and fill in with your Docker details:
 
 ![service conn](./assets/docker.png)
 
-#### Using a Dockerfile
+#### 📝Using a Dockerfile
 
 If you already have a Dockerfile in place we can straight away  create a new pipeline `./azure-pipelines/dockerfile.yml`
 
@@ -505,9 +506,22 @@ steps:
     repository: trallard/$(imageName)
     tags: $(Build.BuildId)
     command: buildAndPush
-    Dockerfile: **/Dockerfile
+    Dockerfile: '**/Dockerfile'
 ```
 
 You can learn more about the Docker tasks 👉🏼[here](https://docs.microsoft.com/azure/devops/pipelines/tasks/build/docker?view=azure-devops&WT.mc_id=RSE-github-taallard)
+
+Add your pipeline as we did with the Conda an Python ones.
+
+
+#### 🛠 Using repo2docker
+
+We can also use `repo2docker` to simplify the creation of your Docker images. 
+
+You can learn more about `repo2docker` 👉🏼 [here](https://repo2docker.readthedocs.io/en/latest/usage.html).
+
+We start by creating a new file: `.azure-pipelines/repo2docker.yml`
+
+
 
 <!-- </details> -->
