@@ -1,0 +1,14 @@
+# requirements for the bokeh app contained in this project
+pylint
+pytest
+Jinja2 >=2.7
+numpy >=1.7.1
+packaging >=16.8
+pillow >=4.0
+python-dateutil >=2.1
+PyYAML >=3.10
+six >=1.5.2
+tornado >=4.3
+bokeh
+scipy
+scikit-learn

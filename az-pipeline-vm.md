@@ -1,7 +1,6 @@
 # Introduction to Azure Pipelines
-
 - [Introduction to Azure Pipelines](#introduction-to-azure-pipelines)
-  - [💻 What you'll actually do](#%f0%9f%92%bb-what-youll-actually-do)
+  - [💻 What you'll be doing](#%f0%9f%92%bb-what-youll-be-doing)
   - [🛠 Azure DevOps setup](#%f0%9f%9b%a0-azure-devops-setup)
   - [📝 Understanding the Azure Pipeline Build](#%f0%9f%93%9d-understanding-the-azure-pipeline-build)
     - [👩🏿‍💻 Hands on](#%f0%9f%91%a9%f0%9f%8f%bf%e2%80%8d%f0%9f%92%bb-hands-on)
@@ -10,11 +9,12 @@
     - [🐍 Multiple Python versions](#%f0%9f%90%8d-multiple-python-versions)
   - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
 
+
 You can use Azure pipelines to test, build and deploy your Python (or any other language) projects without needing to set up any insfrastructure of your own.
 
 For this tutorial we will use the [Microsoft-hosted agents](https://docs.microsoft.com/azure/devops/pipelines/agents/hosted?view=azure-devops&WT.mc_id=rse19-github-taallard) with Python preinstalled - note that these can be Windows, Linux or MacOS based.
 
-## 💻 What you'll actually do
+## 💻 What you'll be doing
 
 1. Create a new Azure DevOps CI pipeline
 2. Create a basic CI pipeline that will run automated `pytests` for your bokeh apps
@@ -174,7 +174,7 @@ Save, commit and see your pipeline run!
 ### 🐍 Multiple Python versions
 
 You can modify your steps to use a matrix specification:
-(see [reference here](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example&WT.mc_id=rse19-github-taallard#strategies))
+(👉🏼 see [reference here](https://docs.microsoft.com/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example&WT.mc_id=rse19-github-taallard#strategies))
 
 ```yaml
 trigger:
@@ -209,14 +209,20 @@ steps:
   displayName: 'pytest'
 
 ```
-Commit > see run!
+Commit your changes and you should be able to see the pipeline run.
+
+🚥 Add a step script for linting using pylint:
+```
+1. install pylint from pip
+2. lint the boston/*.py and iris/*.py files
+```
 
 ## 🖥👾 Adding multi OS support 
 
 <!-- <details> -->
-  <summary>Click to expand!</summary>
+  <summary>👇🏽 Click to expand!</summary>
   
-You can add Windows, Mac OS and Ubuntu runners to your environment:
+You can add Windows, Mac OS and Ubuntu runners to your environment, this allows you to have a more extensive set of tests within one single CI provider.
 
 ```yaml
 trigger:
