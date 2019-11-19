@@ -3,7 +3,7 @@
 
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema#triggers
 trigger:
-  - azure-pipelines
+  - pipelines
   - master 
 
 stages:
