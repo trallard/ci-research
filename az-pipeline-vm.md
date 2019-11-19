@@ -2,14 +2,14 @@
 - [Introduction to Azure Pipelines](#introduction-to-azure-pipelines)
   - [💻 What you'll be doing](#%f0%9f%92%bb-what-youll-be-doing)
   - [🛠 Azure DevOps setup](#%f0%9f%9b%a0-azure-devops-setup)
-  - [📝 Understanding the Azure Pipeline Build](#%f0%9f%93%9d-understanding-the-azure-pipeline-build)
+  - [🙇🏻‍♀️ Understanding the Azure Pipeline Build](#%f0%9f%99%87%f0%9f%8f%bb%e2%80%8d%e2%99%80%ef%b8%8f-understanding-the-azure-pipeline-build)
   - [👩🏿‍💻 Hands on](#%f0%9f%91%a9%f0%9f%8f%bf%e2%80%8d%f0%9f%92%bb-hands-on)
     - [🛠 Setting your pipeline](#%f0%9f%9b%a0-setting-your-pipeline)
     - [🐍 Python specific pipelines](#%f0%9f%90%8d-python-specific-pipelines)
     - [🐍 Multiple Python versions](#%f0%9f%90%8d-multiple-python-versions)
     - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
     - [🖥🐍 Using conda environments](#%f0%9f%96%a5%f0%9f%90%8d-using-conda-environments)
-    - [🖥 Complex pipelines: using templates](#%f0%9f%96%a5-complex-pipelines-using-templates)
+    - [🤯 Complex pipelines: using templates](#%f0%9f%a4%af-complex-pipelines-using-templates)
     - [🐳 Bonus: Docker with Azure pipeliens](#%f0%9f%90%b3-bonus-docker-with-azure-pipeliens)
       - [📝Using a Dockerfile](#%f0%9f%93%9dusing-a-dockerfile)
       - [🛠 Using repo2docker](#%f0%9f%9b%a0-using-repo2docker)
@@ -42,7 +42,7 @@ Make sure to give your project a meaningful name and add a sensible description.
 Then click on **Create**
 
 
-## 📝 Understanding the Azure Pipeline Build
+## 🙇🏻‍♀️ Understanding the Azure Pipeline Build
 
 A build can have multiple stages. Each stage can contain one or more jobs. For example you might have the following stages:
 - Test (my code using unittest)
@@ -354,7 +354,7 @@ This will add a whole new pipeline to your CI, which can have different triggers
 </details>
 
 
-### 🖥 Complex pipelines: using templates
+### 🤯 Complex pipelines: using templates
 
 <details>
 <summary>👇🏽 Click to expand!</summary>
@@ -461,10 +461,6 @@ steps:
 
 Note that you need a DockerHub account to complete all of this section. Though you can omit the pushing your image. 
 
-
-<!-- <details> -->
-<summary>👇🏽 Click to expand!</summary>
-
 First you need to create a connection service to access DockerHub. This will help us to keep our password secret.
 
 To do this click on `project settings > service connection > new service connection >  docker registry` 
@@ -476,6 +472,10 @@ Give your connection a name and fill in with your Docker details:
 ![service conn](./assets/docker.png)
 
 #### 📝Using a Dockerfile
+
+<details>
+<summary>👇🏽 Click to expand!</summary>
+
 
 If you already have a Dockerfile in place we can straight away  create a new pipeline `./azure-pipelines/dockerfile.yml`
 
@@ -513,15 +513,49 @@ You can learn more about the Docker tasks 👉🏼[here](https://docs.microsoft.
 
 Add your pipeline as we did with the Conda an Python ones.
 
+</details>
 
 #### 🛠 Using repo2docker
 
 We can also use `repo2docker` to simplify the creation of your Docker images. 
 
+<details>
+<summary>👇🏽 Click to expand!</summary>
+
+
 You can learn more about `repo2docker` 👉🏼 [here](https://repo2docker.readthedocs.io/en/latest/usage.html).
 
 We start by creating a new file: `.azure-pipelines/repo2docker.yml`
 
+```yaml
+trigger:
+  - master
+  - pipelines
 
+pool:
+  vmImage: "Ubuntu-16.04"
 
-<!-- </details> -->
+variables:
+  imageName: "trallard/ci-research-r2d"
+
+steps:
+  - task: Docker@2
+    displayName: Login to DockerHub
+    inputs:
+      command: login
+      containerRegistry: trallard-docker
+  - script: python -m pip install --upgrade pip
+          displayName: "Upgrade pip"
+  - script: python -m pip install repo2docker
+          displayName: "Install repo2docker"
+  - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
+          displayName: "Create Docker image"
+  - task: Docker@2
+    displayName: Push image
+    inputs: 
+      command: push
+      imageName: $(imageName):$(Build.BuildId)
+
+```
+
+</details>
