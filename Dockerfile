@@ -1,4 +1,4 @@
-FROM python:3.6.4-strecth 
+FROM python:3.6.4-stretch
 LABEL maintainer="Tania Allard"
 
 COPY ./requirements.txt /tmp/requirements.txt

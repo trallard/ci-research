@@ -6,6 +6,9 @@ trigger:
   - master
   - pipelines
 
+pool:
+  vmImage: "Ubuntu-18.04"
+  
 resources:
   - repo: self
 
@@ -20,7 +23,7 @@ stages:
       - job: Build
         displayName: Build
         pool:
-          vmImage: "ubuntu-latest"
+          vmImage: $(vmImage)
         steps:
           - task: Docker@2
             displayName: Login DockerHub

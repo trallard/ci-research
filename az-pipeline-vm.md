@@ -130,7 +130,7 @@ trigger:
   - master
 
 pool:
-  vmImage: "ubuntu-16.04"
+  vmImage: "Ubuntu-18.04"
 
 steps:
 - task: UsePythonVersion@0

@@ -3,25 +3,33 @@ trigger:
   - pipelines
 
 pool:
-  vmImage: "Ubuntu-16.04"
+  vmImage: "Ubuntu-18.04"
 
 variables:
   imageName: "trallard/ci-research-r2d"
 
-steps:
-  - task: Docker@2
-    displayName: Login to DockerHub
-    inputs:
-      command: login
-      containerRegistry: trallard-docker
-  - script: python -m pip install --upgrade pip
-          displayName: "Upgrade pip"
-  - script: python -m pip install repo2docker
-          displayName: "Install repo2docker"
-  - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
-          displayName: "Create Docker image"
-  - task: Docker@2
-    displayName: Push image
-    inputs: 
-      command: push
-      imageName: $(imageName):$(Build.BuildId)
+stages:
+  - stage: Build
+    displayName: Build image
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImage)
+        steps:
+          - task: Docker@2
+            displayName: Login DockerHub
+            inputs:
+              command: login
+              containerRegistry: trallard-docker
+          - script: python -m pip install --upgrade pip
+            displayName: "Upgrade pip"
+          - script: python -m pip install repo2docker
+            displayName: "Install repo2docker"
+          - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
+            displayName: "Create Docker image"
+          - task: Docker@2
+            displayName: Push image
+            inputs: 
+              command: push
+              imageName: $(imageName):$(Build.BuildId)
