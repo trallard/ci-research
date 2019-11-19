@@ -359,6 +359,8 @@ This will add a whole new pipeline to your CI, which can have different triggers
 Sometimes you want to be able to use complex setups without your yaml becoming too convoluted. 
 For these cases you can create "templates" and import them within your yaml file.
 
+Let's create a `.azure-pipelines/ci.yml` file:
+
 ```yaml
 #  using templates for the pipeline
 trigger:
@@ -427,4 +429,26 @@ jobs:
       - script: tox -e $(tox.env)
         displayName: "Run tox -e $(tox.env)"
 ```
+And an anaconda template `.azure-pipelines/anaconda.yml`
+
+```yml
+steps:
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+    displayName: Add conda to PATH
+
+  - bash: conda create --yes --quiet --name testingEnv
+    displayName: Create Anaconda environment
+
+  - bash: |
+      source activate testingEnv
+      conda install --yes --quiet --name testingEnv python=$PYTHON_VERSION --file requirements.txt
+    displayName: Install Anaconda packages
+
+  - bash: |
+      source activate testingEnv
+      pip install pytest pytest-azurepipelines
+      python -m pytest tests/
+    displayName: pytest
+```
+
 <!-- </details> -->
