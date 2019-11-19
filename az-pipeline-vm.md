@@ -481,32 +481,42 @@ If you already have a Dockerfile in place we can straight away  create a new pip
 
 ```yml
 # Docker
-# Build a Docker image 
+# Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-   - master
-   - pipelines
-
-pool:
-  vmImage: 'Ubuntu-16.04'
+  - master
+  
+resources:
+  - repo: self
 
 variables:
-  imageName: 'ci-research'
+  tag: "$(Build.BuildId)"
+  imageName: "trallard/ci-research"
 
-steps:
-- task: Docker@2
-  displayName: Login to DockerHub
-  inputs:
-    command: login
-    containerRegistry: trallard-docker
-- task: Docker@2
-  displayName: Build an image and push to DockerHub
-  inputs:
-    repository: trallard/$(imageName)
-    tags: $(Build.BuildId)
-    command: buildAndPush
-    Dockerfile: '**/Dockerfile'
+stages:
+  - stage: Build
+    displayName: Build image
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: "Ubuntu-18.04"
+        steps:
+          - task: Docker@2
+            displayName: Login DockerHub
+            inputs:
+              command: login
+              containerRegistry: trallard-docker
+          - task: Docker@2
+            displayName: Build an image
+            inputs:
+              command: buildAndPush
+              dockerfile: "**/Dockerfile"
+              repository: $(imageName)
+              tags: |
+                $(tag)
+
 ```
 
 You can learn more about the Docker tasks 👉🏼[here](https://docs.microsoft.com/azure/devops/pipelines/tasks/build/docker?view=azure-devops&WT.mc_id=RSE-github-taallard)
@@ -532,29 +542,39 @@ trigger:
   - master
   - pipelines
 
-pool:
-  vmImage: "Ubuntu-16.04"
-
 variables:
   imageName: "trallard/ci-research-r2d"
 
-steps:
-  - task: Docker@2
-    displayName: Login to DockerHub
-    inputs:
-      command: login
-      containerRegistry: trallard-docker
-  - script: python -m pip install --upgrade pip
-          displayName: "Upgrade pip"
-  - script: python -m pip install repo2docker
-          displayName: "Install repo2docker"
-  - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
-          displayName: "Create Docker image"
-  - task: Docker@2
-    displayName: Push image
-    inputs: 
-      command: push
-      imageName: $(imageName):$(Build.BuildId)
+stages:
+  - stage: Build
+    displayName: Build image with repo2docker
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: "Ubuntu-18.04"
+        steps:
+          - task: UsePythonVersion@0
+            displayName: 'Get Python version' 
+            inputs:
+              versionSpec: '3.7'
+          - task: Docker@2
+            displayName: Login DockerHub
+            inputs:
+              command: login
+              containerRegistry: trallard-docker
+          - script: python -m pip install --upgrade pip
+            displayName: "Upgrade pip"
+          - script: python -m pip install jupyter-repo2docker
+            displayName: "Install repo2docker"
+          - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
+            displayName: "Create Docker image"
+          - task: Docker@2
+            displayName: Push image
+            inputs: 
+              command: push
+              imageName: $(imageName):$(Build.BuildId)
+
 
 ```
 
