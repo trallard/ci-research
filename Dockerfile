@@ -1,6 +1,5 @@
-LABEL maintainer="Tania Allard"
-
 FROM python:3.6.4-strecth 
+LABEL maintainer="Tania Allard"
 
 COPY ./requirements.txt /tmp/requirements.txt
 
