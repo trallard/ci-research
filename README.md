@@ -15,7 +15,12 @@
 📝 A text editor. I 💜VS Code, you can get it following this link 👉🏼 [VSCode](https://code.visualstudio.com//?wt.mc_id=rse19-github-taallard).
 
 ### Using Azure pipelines
-The workshop hands on session materials for using Azure pipelines can be found 👉🏼 [here](./az-pipeline-vm.md)
+The workshop hands on session materials for using Azure pipelines can be found 👉🏼 [here](./az-pipeline-vm.md).
+
+### Using GitHub actions
+The workshop hands on session materials for using GitHub actions can be found 👉🏼 [here](./github-actions.md).
+
+We will also have time for you to create your own custom actions!!!
 
 ### Running the application locally
 
