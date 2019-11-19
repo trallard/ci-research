@@ -3,11 +3,13 @@
   - [💻 What you'll be doing](#%f0%9f%92%bb-what-youll-be-doing)
   - [🛠 Azure DevOps setup](#%f0%9f%9b%a0-azure-devops-setup)
   - [📝 Understanding the Azure Pipeline Build](#%f0%9f%93%9d-understanding-the-azure-pipeline-build)
-    - [👩🏿‍💻 Hands on](#%f0%9f%91%a9%f0%9f%8f%bf%e2%80%8d%f0%9f%92%bb-hands-on)
-    - [Setting your pipeline](#setting-your-pipeline)
-  - [🐍 Python specific pipelines](#%f0%9f%90%8d-python-specific-pipelines)
+  - [👩🏿‍💻 Hands on](#%f0%9f%91%a9%f0%9f%8f%bf%e2%80%8d%f0%9f%92%bb-hands-on)
+    - [🛠 Setting your pipeline](#%f0%9f%9b%a0-setting-your-pipeline)
+    - [🐍 Python specific pipelines](#%f0%9f%90%8d-python-specific-pipelines)
     - [🐍 Multiple Python versions](#%f0%9f%90%8d-multiple-python-versions)
-  - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
+    - [🖥👾 Adding multi OS support](#%f0%9f%96%a5%f0%9f%91%be-adding-multi-os-support)
+    - [🖥🐍 Using conda environments](#%f0%9f%96%a5%f0%9f%90%8d-using-conda-environments)
+    - [🖥 Complex pipelines: using templates](#%f0%9f%96%a5-complex-pipelines-using-templates)
 
 
 You can use Azure pipelines to test, build and deploy your Python (or any other language) projects without needing to set up any insfrastructure of your own.
@@ -52,10 +54,10 @@ You can find a list of all the available tasks in the [Pipelines documentation](
 
 ---
 
-### 👩🏿‍💻 Hands on 
+## 👩🏿‍💻 Hands on 
 Clone this wokrshop's repo: <https://github.com/trallard/ci-research> to your own GitHub profile.
 
-✨ Let's start by creating our `azure-pipelines.yml` file in our repo. Make sure to place it on the root of your project directory.
+✨ Let's start by creating our `.azure-pipelines/azure-pipelines.yml` file in our repo. 
 
 ```yaml
 # Python example Azure Pipeline
@@ -102,7 +104,7 @@ git add azure-pipelines.yml
 git push
 ```
 
-### Setting your pipeline
+### 🛠 Setting your pipeline
 
 Back in Azure Devops click on **Pipelines > New pipelines** and then select GitHub from the options presented:
 
@@ -119,7 +121,7 @@ Click on save and then run.
 You should see your first pipeline run and the logs being displayed.
 
 
-## 🐍 Python specific pipelines
+### 🐍 Python specific pipelines
 
 Replace your steps:
 
@@ -217,9 +219,9 @@ Commit your changes and you should be able to see the pipeline run.
 2. lint the boston/*.py and iris/*.py files
 ```
 
-## 🖥👾 Adding multi OS support 
+### 🖥👾 Adding multi OS support 
 
-<!-- <details> -->
+<details>
   <summary>👇🏽 Click to expand!</summary>
   
 You can add Windows, Mac OS and Ubuntu runners to your environment, this allows you to have a more extensive set of tests within one single CI provider.
@@ -295,4 +297,134 @@ jobs:
           displayName: 'Test with pytest'
   ```
 
+</details>
+
+
+### 🖥🐍 Using conda environments 
+
+<details>
+
+<summary>👇🏽 Click to expand!</summary>
+
+You can also use and create conda environments within your builds. 
+Let's create a `.azure-pipelines/conda.yml` file:
+
+```yaml
+trigger:
+  - pipelines
+  - master
+
+jobs:
+  - job:
+    displayName: Anaconda_ubuntu
+    pool:
+      vmImage: "ubuntu-16.04"
+    strategy:
+      matrix:
+        Python36:
+          python.version: "3.6"
+        Python37:
+          python.version: "3.7"
+    steps:
+      - bash: echo "##vso[task.prependpath]$CONDA/bin"
+        displayName: Add conda to PATH
+
+      - bash: conda create --yes --quiet --name testingEnv
+        displayName: Create Anaconda environment
+
+      - bash: |
+          source activate testingEnv
+          conda install --yes --quiet --name testingEnv python=$PYTHON_VERSION --file requirements.txt
+        displayName: Install Anaconda packages
+
+      - bash: |
+          source activate testingEnv
+          pip install pytest pytest-azurepipelines
+          python -m pytest tests/
+        displayName: pytest
+```
+
+Now we can create a new pipeline. Go to Pipelines > + new > GitHub > Existing yaml file.
+
+This will add a whole new pipeline to your CI, which can have different triggers, environments, tests and builds.
+
+</details>
+
+
+### 🖥 Complex pipelines: using templates
+
+<!-- <details> -->
+<summary>👇🏽 Click to expand!</summary>
+
+Sometimes you want to be able to use complex setups without your yaml becoming too convoluted. 
+For these cases you can create "templates" and import them within your yaml file.
+
+```yaml
+#  using templates for the pipeline
+trigger:
+  - azure-pipelines
+  - master
+
+jobs:
+  - job:
+    displayName: Anaconda_ubuntu
+    pool:
+      vmImage: "ubuntu-16.04"
+    strategy:
+      matrix:
+        Python36:
+          python.version: "3.6"
+        Python37:
+          python.version: "3.7"
+
+    # using template
+    steps:
+      - template: ./anaconda.yml
+
+  # testing in MacOS
+  - job:
+    displayName: MacOS_test
+    pool:
+      vmImage: "macOS-10.13"
+    strategy:
+      matrix:
+        Python37:
+          python.version: "3.7"
+
+    steps:
+      - template: ./anaconda.yml
+
+  #  using TOX for the tests
+  - job:
+    displayName: TOX_tests
+    pool:
+      vmImage: "ubuntu-16.04"
+    strategy:
+      matrix:
+        py36:
+          python.version: "3.6"
+          tox.env: py36
+        py37:
+          python.version: "3.7"
+          tox.env: py37
+        py36-black:
+          python.version: "3.6"
+          tox.env: py36-black
+
+    steps:
+      - task: UsePythonVersion@0
+        displayName: "Use Python $(python.version) for tests"
+        inputs:
+          versionSpec: "$(python.version)"
+          architecture: "x64"
+
+      - script: pip install -U pip
+        displayName: "Upgrade pip"
+
+      - script: pip install tox
+        displayName: "Install tox"
+
+      - script: tox -e $(tox.env)
+        displayName: "Run tox -e $(tox.env)"
+```
 <!-- </details> -->
