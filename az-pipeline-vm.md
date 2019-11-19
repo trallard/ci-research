@@ -542,9 +542,6 @@ trigger:
   - master
   - pipelines
 
-variables:
-  imageName: "trallard/ci-research-r2d"
-
 stages:
   - stage: Build
     displayName: Build image with repo2docker
@@ -567,14 +564,14 @@ stages:
             displayName: "Upgrade pip"
           - script: python -m pip install jupyter-repo2docker
             displayName: "Install repo2docker"
-          - script: jupyter-repo2docker ./ --image-name $(imageName):$(Build.BuildId)
+          - script: |
+              jupyter-repo2docker --debug --user-name jovyan --user-id 1000 --no-run --image-name "trallard/ci-research-r2d:latest" https://github.com/trallard/ci-research.git
             displayName: "Create Docker image"
           - task: Docker@2
             displayName: Push image
             inputs: 
               command: push
-              imageName: $(imageName):$(Build.BuildId)
-
+              imageName: trallard/ci-research-r2d:latest
 
 ```
 
