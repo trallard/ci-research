@@ -1,6 +1,6 @@
 LABEL maintainer="Tania Allard"
 
-FROM python:3.6
+FROM python:3.6.4-strecth 
 
 COPY ./requirements.txt /tmp/requirements.txt
 
