@@ -1,0 +1,23 @@
+trigger:
+  - master
+  - pipelines
+
+pool:
+  vmImage: "Ubuntu-16.04"
+
+variables:
+  imageName: "ci-research"
+
+steps:
+  - task: Docker@2
+    displayName: Login to DockerHub
+    inputs:
+      command: login
+      containerRegistry: trallard-docker
+  - task: Docker@2
+    displayName: Build an image and push to DockerHub
+    inputs:
+      repository: trallard/$(imageName)
+      tags: $(Build.BuildId)
+      command: buildAndPush
+      Dockerfile: "**/Dockerfile"
