@@ -1,0 +1,32 @@
+trigger:
+  - azure-pipelines
+  - master
+
+pool:
+  vmImage: "ubuntu-18.04"
+
+steps:
+  - task: UsePythonVersion@0
+    displayName: "Use Python 3.6"
+    inputs:
+      versionSpec: "3.6"
+      architecture: "x64"
+
+  - script: python -m pip install --upgrade pip
+    displayName: "Upgrade pip"
+
+  - script: |
+      # commands run within the step
+      pip install -r requirements.txt
+    displayName: "Install dependencies"
+
+  - script: |
+      python -m pip install pylint --quiet
+      pylint boston/*.py
+      pylint iris/*.py
+    displayName: "Run lint tests"
+
+  - script: |
+      pip install pytest
+      python -m pytest tests/
+    displayName: "Test with pytest"
