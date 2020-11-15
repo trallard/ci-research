@@ -23,9 +23,9 @@ Note that since it's only a 1 hour course this is meant to be a taster of the ca
 
 💻 Git installed in your personal laptop
 
-🚇 _[Azure DevOps account](https://azure.microsoft.com/services/devops/?WT.mc_id=rse-github-taallard)_
+🚇 _[Azure DevOps account](https://azure.microsoft.com/services/devops/?WT.mc_id=academic-0000-taallard)_
 
-📝 A text editor. I 💜VS Code, you can get it following this link 👉🏼 [VSCode](https://code.visualstudio.com//?wt.mc_id=rse-github-taallard).
+📝 A text editor. I 💜VS Code, you can get it following this link 👉🏼 [VSCode](https://code.visualstudio.com//?WT.mc_id=academic-0000-taallard).
 
 ### ☁️ Using Azure pipelines
 The workshop hands on session materials for using Azure pipelines can be found 👉🏼 [here](./az-pipeline-vm.md).
